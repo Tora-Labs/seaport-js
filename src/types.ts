@@ -47,6 +47,12 @@ type TypedDataField = {
   type: string;
 };
 
+export type GasConfig = {
+  gasLimit: string;
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string
+}
+
 // Temporary until TypedDataSigner is added in ethers (in v6)
 export type Signer = ethers.Signer & {
   _signTypedData(
@@ -190,7 +196,7 @@ export type OrderWithCounter = {
 export type ContractMethodReturnType<
   T extends Contract,
   U extends keyof T["callStatic"]
-  // eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef
 > = Awaited<ReturnType<T["callStatic"][U]>>;
 
 export type TransactionMethods<T = unknown> = {
@@ -207,8 +213,8 @@ export type ApprovalAction = {
   itemType: ItemType;
   operator: string;
   transactionMethods:
-    | TransactionMethods<ContractMethodReturnType<ERC721, "setApprovalForAll">>
-    | TransactionMethods<ContractMethodReturnType<ERC20, "approve">>;
+  | TransactionMethods<ContractMethodReturnType<ERC721, "setApprovalForAll">>
+  | TransactionMethods<ContractMethodReturnType<ERC20, "approve">>;
 };
 
 export type ExchangeAction<T = unknown> = {
@@ -236,8 +242,8 @@ export type OrderExchangeActions<T> = readonly [
 
 export type OrderUseCase<T extends CreateOrderAction | ExchangeAction> = {
   actions: T extends CreateOrderAction
-    ? CreateOrderActions
-    : OrderExchangeActions<T extends ExchangeAction<infer U> ? U : never>;
+  ? CreateOrderActions
+  : OrderExchangeActions<T extends ExchangeAction<infer U> ? U : never>;
   executeAllActions: () => Promise<
     T extends CreateOrderAction ? OrderWithCounter : ContractTransaction
   >;

@@ -23,6 +23,7 @@ import type {
   OrderStatus,
   OrderUseCase,
   ContractMethodReturnType,
+  GasConfig,
 } from "../types";
 import { getApprovalActions } from "./approval";
 import {
@@ -190,6 +191,7 @@ export async function fulfillBasicOrder({
   tips = [],
   conduitKey = NO_CONDUIT,
   domain,
+  gasConfig
 }: {
   order: Order;
   seaportContract: Seaport;
@@ -202,6 +204,7 @@ export async function fulfillBasicOrder({
   tips?: ConsiderationItem[];
   conduitKey: string;
   domain?: string;
+  gasConfig?: GasConfig
 }): Promise<
   OrderUseCase<
     ExchangeAction<
@@ -282,7 +285,7 @@ export async function fulfillBasicOrder({
     zoneHash: order.parameters.zoneHash,
   };
 
-  const payableOverrides = { value: totalNativeAmount };
+  const payableOverrides = gasConfig ? { value: totalNativeAmount, ...gasConfig } : { value: totalNativeAmount} ;
 
   const approvalActions = await getApprovalActions(
     insufficientApprovals,
@@ -327,6 +330,7 @@ export async function fulfillStandardOrder({
   recipientAddress,
   signer,
   domain,
+  gasConfig
 }: {
   order: Order;
   unitsToFill?: BigNumberish;
@@ -346,6 +350,7 @@ export async function fulfillStandardOrder({
   timeBasedItemParams: TimeBasedItemParams;
   signer: Signer;
   domain?: string;
+  gasConfig?: GasConfig
 }): Promise<
   OrderUseCase<
     ExchangeAction<
@@ -417,7 +422,7 @@ export async function fulfillStandardOrder({
     fulfillerOperator,
   });
 
-  const payableOverrides = { value: totalNativeAmount };
+  const payableOverrides = gasConfig ? { value: totalNativeAmount, ...gasConfig } : { value: totalNativeAmount} ;
 
   const approvalActions = await getApprovalActions(
     insufficientApprovals,

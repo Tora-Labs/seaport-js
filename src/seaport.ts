@@ -37,6 +37,7 @@ import type {
   MatchOrdersFulfillment,
   SeaportContract,
   Signer,
+  GasConfig,
 } from "./types";
 import { getApprovalActions } from "./utils/approval";
 import {
@@ -641,6 +642,7 @@ export class Seaport {
     conduitKey = this.defaultConduitKey,
     recipientAddress = ethers.constants.AddressZero,
     domain = "",
+    gasConfig
   }: {
     order: OrderWithCounter;
     unitsToFill?: BigNumberish;
@@ -652,6 +654,7 @@ export class Seaport {
     conduitKey?: string;
     recipientAddress?: string;
     domain?: string;
+    gasConfig?: GasConfig
   }): Promise<
     OrderUseCase<
       ExchangeAction<
@@ -744,6 +747,7 @@ export class Seaport {
         signer: fulfiller,
         tips: tipConsiderationItems,
         domain,
+        gasConfig
       });
     }
 
